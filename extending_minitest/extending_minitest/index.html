@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <link href="css/reset.css" rel="stylesheet" />
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1024" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="shortcut icon" href="css/favicon.png" />
+    <link rel="apple-touch-icon" href="css/apple-touch-icon.png" />
+    <!-- Code Prettifier: -->
+<link href="css/highlight.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+    <link href="css/style.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,800italic,300,400,800' rel='stylesheet' type='text/css'>    
+
+
+  </head>
+
+  <body>
+  <div class="fallback-message">
+  <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+  <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+  </div>
+    <div id="impress">
+    <div class='step' >
+    
+<h1>Extending Minitest</h1>
+
+<h2>Samuel Mullen</h2>
+</div>
+      <div class='step' >
+    
+<h2>Reasons I use Minitest</h2>
+
+<ul>
+<li>It comes standard with Ruby &gt;= 1.9</li>
+<li>It&#39;s easy to learn
+
+<ul>
+<li>I never felt like I was using Rspec to it&#39;s full potential</li>
+</ul></li>
+<li>It&#39;s fast!</li>
+<li>It&#39;s easy to hack</li>
+</ul>
+</div>
+      <div class='step' >
+    
+<h1>Minitest 5</h1>
+
+<h2>April 24, 2013 - Oh God... here we go</h2>
+
+<p>9a57c520ceac76abfe6105866f8548a94eb357b6</p>
+</div>
+      <div class='step' >
+    
+<h1>How Minitest 5 Works</h1>
+</div>
+      <div class='step' >
+    
+<h2>include &quot;minitest/autorun&quot;</h2>
+<pre><code class='prettyprint ruby'>require "minitest"
+require "minitest/spec"
+require "minitest/mock"
+
+Minitest.autorun
+</code></pre></div>
+      <div class='step' >
+    
+<h2>At Exit (minitest.rb)</h2>
+<pre><code class='prettyprint ruby'>def self.autorun
+  at_exit {
+    next if $! and not $!.kind_of? SystemExit
+
+    exit_code = nil
+
+    at_exit {
+      @@after_run.reverse_each(&:call)
+      exit exit_code || false
+    }
+
+    exit_code = Minitest.run ARGV # <--
+  } unless @@installed_at_exit
+  @@installed_at_exit = true
+end
+</code></pre></div>
+      <div class='step' >
+    
+<h2>Loading Plugins</h2>
+<pre><code class='prettyprint ruby'>def self.run args = []
+  self.load_plugins # <-- key
+
+  options = process_args args
+
+  reporter = CompositeReporter.new
+  reporter << ProgressReporter.new(options[:io], options)
+  reporter << SummaryReporter.new(options[:io], options)
+
+  self.reporter = reporter # make it available to plugins
+  self.init_plugins options # <-- key
+
+  ...
+
+end
+</code></pre></div>
+      <div class='step' >
+    
+<h2>Summarized</h2>
+
+<ol>
+<li>include &#39;minitest/autorun&#39; </li>
+<li>starts up via <code class='inline prettyprint'>at_exit</code></li>
+<li>Runs Minitest::run
+
+<ol>
+<li>Load the plugins</li>
+<li>Load the default reporters</li>
+<li>Initialize the plugins</li>
+</ol></li>
+</ol>
+</div>
+      <div class='step' >
+    
+<h1>Example Ruby</h1>
+<pre><code class='prettyprint ruby'>class Foo
+  def initialize
+    @bar = 'something'
+  end
+end
+</code></pre></div>
+      <div class='step' >
+    
+<h1>The how and why of minitest&#39;s design (i.e. history)</h1>
+</div>
+      <div class='step' >
+    
+<h1>How minitest works:</h1>
+</div>
+      <div class='step' >
+    
+<h1>Plugins</h1>
+
+<ul>
+<li>Progress</li>
+<li>Reporters
+
+<ul>
+<li>Export results to:</li>
+</ul></li>
+</ul>
+</div>
+      <div class='step' >
+    
+<p>Assertions and Expectations</p>
+
+<p>Read the Code
+* It&#39;s very approachable
+* It&#39;s very funny</p>
+
+      </div>
+    <script src="js/impress.js"></script>
+    <script>impress().init();</script>
+  </body>
+</html>
+    

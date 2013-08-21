@@ -1,0 +1,31 @@
+.content ul {
+}
+
+.content ol {
+  font-size: 1em;
+}
+
+.code > p {
+  text-align: left;
+}
+
+.bullets > ul > li {
+  text-align: left;
+}
+
+.smbullets > ul > li {
+  text-align: left;
+}
+
+pre.medium {
+  font-size: 240%;
+}
+
+pre.small {
+  font-size: 170%;
+}
+
+pre.tiny {
+  font-size: 130%;
+}
+
