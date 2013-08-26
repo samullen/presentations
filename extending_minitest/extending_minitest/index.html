@@ -34,6 +34,33 @@
 </div>
       <div class='step' >
     
+<h2>Extending Minitest 5</h2>
+
+<ul>
+<li>New assertions and expectations</li>
+<li>Plugins
+
+<ul>
+<li>Progress Reporters</li>
+<li>Statistics Reporters</li>
+</ul></li>
+</ul>
+</div>
+      <div class='step' >
+    
+<p>Note:</p>
+
+<ul>
+<li>I will be focusing on Minitest::Spec
+
+<ul>
+<li>i.e. Expectations</li>
+</ul></li>
+<li>I&#39;m assuming some familiarity with testing</li>
+</ul>
+</div>
+      <div class='step' >
+    
 <h2>Reasons I use Minitest</h2>
 
 <ul>
@@ -49,15 +76,87 @@
 </div>
       <div class='step' >
     
-<h1>Minitest 5</h1>
+<h1>Adding Assertions and Expectations</h1>
+</div>
+      <div class='step' >
+    
+<h2>Why would you want to add new Assertions and Expectations?</h2>
 
-<h2>April 24, 2013 - Oh God... here we go</h2>
+<ul>
+<li>Readability
+
+<ul>
+<li><code class='inline prettyprint'>some_decimal.must_round_to 3</code></li>
+<li>... is more readable than ...</li>
+<li><code class='inline prettyprint'>some_decimal.round.must_equal 3</code></li>
+</ul></li>
+<li>It&#39;s DRYer</li>
+</ul>
+</div>
+      <div class='step' >
+    
+<h2>Adding the new Assertion</h2>
+
+<h3>It&#39;s just &quot;monkypatching&quot;</h3>
+<pre><code class='prettyprint ruby'>class Minitest::Assertion
+  def assert_admin(obj, msg=nil)
+    msg = message(msg, "") { diff true, obj.admin? }
+    assert true == obj.admin?, msg
+  end
+
+  def refute_admin(obj, msg=nil)
+    msg = message(msg, "") { diff false, obj.admin? }
+    assert false == obj.admin?, msg
+  end
+end
+</code></pre></div>
+      <div class='step' >
+    
+<h2>Adding the Expectation</h2>
+
+<h3><code class='inline prettyprint'>infect_an_assertion</code></h3>
+<pre><code class='prettyprint ruby'>class Minitest::Assertion
+  infect_an_assertion :assert_admin, :must_be_admin, :unary
+
+  infect_an_assertion :refute_admin, :wont_be_admin, :unary
+
+end
+</code></pre></div>
+      <div class='step' >
+    
+<h2>Expectation Flags</h2>
+
+<h3>:unary and :reverse</h3>
+
+<ul>
+<li>Most Assertions and Expectations won&#39;t use them</li>
+<li>just &quot;truthy&quot; values
+
+<ul>
+<li>could be <code class='inline prettyprint'>true</code>, <code class='inline prettyprint'>1</code>, or even <code class='inline prettyprint'>:foo</code> </li>
+</ul></li>
+<li>Flips the order of the method call
+
+<ul>
+<li>Example: <code class='inline prettyprint'>must_include</code></li>
+</ul></li>
+</ul>
+</div>
+      <div class='step' >
+    
+<h1>Minitest Plugins</h1>
+</div>
+      <div class='step' >
+    
+<h2>Minitest 5</h2>
+
+<h3>April 24, 2013 - Oh God... here we go</h3>
 
 <p>9a57c520ceac76abfe6105866f8548a94eb357b6</p>
 </div>
       <div class='step' >
     
-<h1>How Minitest 5 Works</h1>
+<h2>How Minitest 5 Works</h2>
 </div>
       <div class='step' >
     

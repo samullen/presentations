@@ -6,6 +6,23 @@ Author: Samuel Mullen
 # Extending Minitest
 ## Samuel Mullen
 
+---
+
+## Extending Minitest 5
+
+* New assertions and expectations
+* Plugins
+  * Progress Reporters
+  * Statistics Reporters
+
+---
+
+Note:
+
+* I will be focusing on Minitest::Spec
+  * i.e. Expectations
+* I'm assuming some familiarity with testing
+
 --- 
 
 ## Reasons I use Minitest 
@@ -18,14 +35,76 @@ Author: Samuel Mullen
 
 ---
 
-# Minitest 5
-## April 24, 2013 - Oh God... here we go
+# Adding Assertions and Expectations
+
+---
+
+## Why would you want to add new Assertions and Expectations?
+
+* Readability
+  * `some_decimal.must_round_to 3`
+  * ... is more readable than ...
+  * `some_decimal.round.must_equal 3`
+* It's DRYer
+
+---
+
+## Adding the new Assertion
+### It's just "monkypatching"
+
+``` ruby
+class Minitest::Assertion
+  def assert_admin(obj, msg=nil)
+    msg = message(msg, "") { diff true, obj.admin? }
+    assert true == obj.admin?, msg
+  end
+
+  def refute_admin(obj, msg=nil)
+    msg = message(msg, "") { diff false, obj.admin? }
+    assert false == obj.admin?, msg
+  end
+end
+```
+
+---
+
+## Adding the Expectation
+### `infect_an_assertion`
+
+``` ruby
+class Minitest::Assertion
+  infect_an_assertion :assert_admin, :must_be_admin, :unary
+
+  infect_an_assertion :refute_admin, :wont_be_admin, :unary
+
+end
+```
+
+---
+
+## Expectation Flags
+### :unary and :reverse
+
+* Most Assertions and Expectations won't use them
+* just "truthy" values
+  * could be `true`, `1`, or even `:foo` 
+* Flips the order of the method call
+  * Example: `must_include`
+
+---
+
+# Minitest Plugins
+
+---
+
+## Minitest 5
+### April 24, 2013 - Oh God... here we go
 
 9a57c520ceac76abfe6105866f8548a94eb357b6
 
 ---
 
-# How Minitest 5 Works
+## How Minitest 5 Works
 
 --- 
 
