@@ -48,15 +48,15 @@
 </div>
       <div class='step' >
     
-<p>Note:</p>
+<h2>Note:</h2>
 
 <ul>
+<li>I&#39;m assuming some familiarity with testing</li>
 <li>I will be focusing on Minitest::Spec
 
 <ul>
 <li>i.e. Expectations</li>
 </ul></li>
-<li>I&#39;m assuming some familiarity with testing</li>
 </ul>
 </div>
       <div class='step' >
@@ -83,21 +83,22 @@
 <h2>Why would you want to add new Assertions and Expectations?</h2>
 
 <ul>
-<li>Readability
+<li>Readability</li>
+<li>It&#39;s DRYer</li>
+<li>It&#39;s less prone to errors
 
 <ul>
 <li><code class='inline prettyprint'>some_decimal.must_round_to 3</code></li>
 <li>... is more readable than ...</li>
 <li><code class='inline prettyprint'>some_decimal.round.must_equal 3</code></li>
 </ul></li>
-<li>It&#39;s DRYer</li>
 </ul>
 </div>
       <div class='step' >
     
 <h2>Adding the new Assertion</h2>
 
-<h3>It&#39;s just &quot;monkypatching&quot;</h3>
+<h3>It&#39;s just &quot;monkey patching&quot;</h3>
 <pre><code class='prettyprint ruby'>class Minitest::Assertion
   def assert_admin(obj, msg=nil)
     msg = message(msg, "") { diff true, obj.admin? }
@@ -121,6 +122,13 @@ end
   infect_an_assertion :refute_admin, :wont_be_admin, :unary
 
 end
+</code></pre></div>
+      <div class='step' >
+    
+<h2>New Usage</h2>
+<pre><code class='prettyprint ruby'>User.new.wont_be_admin
+
+User.new(role: "admin").must_be_admin
 </code></pre></div>
       <div class='step' >
     
@@ -148,20 +156,14 @@ end
 </div>
       <div class='step' >
     
-<h2>Minitest 5</h2>
-
-<h3>April 24, 2013 - Oh God... here we go</h3>
-
-<p>9a57c520ceac76abfe6105866f8548a94eb357b6</p>
-</div>
-      <div class='step' >
-    
 <h2>How Minitest 5 Works</h2>
 </div>
       <div class='step' >
     
 <h2>include &quot;minitest/autorun&quot;</h2>
-<pre><code class='prettyprint ruby'>require "minitest"
+<pre><code class='prettyprint ruby'># minitest.rb
+
+require "minitest"
 require "minitest/spec"
 require "minitest/mock"
 
@@ -169,8 +171,10 @@ Minitest.autorun
 </code></pre></div>
       <div class='step' >
     
-<h2>At Exit (minitest.rb)</h2>
-<pre><code class='prettyprint ruby'>def self.autorun
+<h2>At Exit</h2>
+<pre><code class='prettyprint ruby'># minitest.rb
+
+def self.autorun
   at_exit {
     next if $! and not $!.kind_of? SystemExit
 
@@ -189,7 +193,9 @@ end
       <div class='step' >
     
 <h2>Loading Plugins</h2>
-<pre><code class='prettyprint ruby'>def self.run args = []
+<pre><code class='prettyprint ruby'># minitest.rb
+
+def self.run args = []
   self.load_plugins # <-- key
 
   options = process_args args
@@ -207,6 +213,26 @@ end
 </code></pre></div>
       <div class='step' >
     
+<h2>From Where Does it Load Plugins?</h2>
+<pre><code class='prettyprint ruby'>def self.load_plugins # :nodoc:
+  return unless self.extensions.empty?
+
+  seen = {}
+
+  Gem.find_files("minitest/*_plugin.rb").each do |plugin_path|
+    # find_files reads from $LOAD_PATH
+    name = File.basename plugin_path, "_plugin.rb"
+
+    next if seen[name]
+    seen[name] = true
+
+    require plugin_path
+    self.extensions << name
+  end
+end
+</code></pre></div>
+      <div class='step' >
+    
 <h2>Summarized</h2>
 
 <ol>
@@ -215,49 +241,187 @@ end
 <li>Runs Minitest::run
 
 <ol>
-<li>Load the plugins</li>
-<li>Load the default reporters</li>
-<li>Initialize the plugins</li>
+<li>Read in external plugins</li>
+<li>Load Minitest&#39;s reporters</li>
+<li>Initialize external plugins</li>
 </ol></li>
 </ol>
 </div>
       <div class='step' >
     
-<h1>Example Ruby</h1>
-<pre><code class='prettyprint ruby'>class Foo
-  def initialize
-    @bar = 'something'
+<h1>Creating Extensions</h1>
+</div>
+      <div class='step' >
+    
+<h2>Conventions</h2>
+
+<ul>
+<li>Files must reside under a <code class='inline prettyprint'>minitest</code> directory
+
+<ul>
+<li>Directory must be part of <code class='inline prettyprint'>$LOAD_PATH</code></li>
+<li><code class='inline prettyprint'>$LOAD_PATH << path/to/application/lib</code></li>
+</ul></li>
+<li>File names must end with <code class='inline prettyprint'>_plugin.rb</code></li>
+<li>Plugins must have at least a <code class='inline prettyprint'>plugin_example_init</code> method</li>
+<li>A <code class='inline prettyprint'>plugin_example_options</code> method can be added to handle added options</li>
+</ul>
+</div>
+      <div class='step' >
+    
+<h1>Progress Reporters</h1>
+</div>
+      <div class='step' >
+    
+<h2>Progress Reporters: The Hard Way</h2>
+
+<h3>Section 1: Appetizers</h3>
+<pre><code class='prettyprint ruby'>module Minitest
+  def self.plugin_color_reporter_init(options)
+    io = ColorReporter.new(options[:io])
+
+    self.reporter.reporters.grep(Minitest::Reporter).each do |rep|
+      rep.io = io
+    end
+  end
+
+  class ColorReporter
+    attr_reader :io
+
+    def initialize(io)
+      @io = io
+    end
+</code></pre></div>
+      <div class='step' >
+    
+<h2>Progress Reporters: The Hard Way</h2>
+
+<h3>Section 2: Main course</h3>
+<pre><code class='prettyprint ruby'>    def print(o)
+      case o
+      when "." then
+        opening = "\e[32m"
+      when "E", "F" then
+        opening = "\e[31m"
+      when "S" then
+        opening = "\e[33m"
+      end
+
+      io.print opening
+      io.print o
+      io.print "\e[m"
+    end
+</code></pre></div>
+      <div class='step' >
+    
+<h2>Progress Reporters: The Hard Way</h2>
+
+<h3>Section 3: Leftovers</h3>
+<pre><code class='prettyprint ruby'>    def puts(*o)
+      io.puts(*o)
+    end
+
+    def method_missing(msg, *args) # :nodoc:
+      io.send(msg, *args)
+    end
   end
 end
 </code></pre></div>
       <div class='step' >
     
-<h1>The how and why of minitest&#39;s design (i.e. history)</h1>
+<h2>Progress Reporters: The Easy Way</h2>
+<pre><code class='prettyprint ruby'>module Minitest
+  class ProgressReporter < Reporter
+    def record(result)
+      case result.result_code
+      when "." then
+        opening = "\e[32m"
+      when "E", "F" then
+        opening = "\e[31m"
+      when "S" then
+        opening = "\e[33m"
+      end
+
+      io.print opening
+      io.print result.result_code
+      io.print "\e[m"
+    end
+  end
+end
+</code></pre></div>
+      <div class='step' >
+    
+<h1>Summary Reporters</h1>
 </div>
       <div class='step' >
     
-<h1>How minitest works:</h1>
-</div>
-      <div class='step' >
-    
-<h1>Plugins</h1>
+<h2>Summary Reporters</h2>
 
 <ul>
-<li>Progress</li>
-<li>Reporters
-
-<ul>
-<li>Export results to:</li>
-</ul></li>
+<li>Output the results of the test run</li>
+<li>Run after the <code class='inline prettyprint'>ProgressReporter</code></li>
+<li>Generally subclassed from <code class='inline prettyprint'>StatisticsReporter</code></li>
 </ul>
 </div>
       <div class='step' >
     
-<p>Assertions and Expectations</p>
+<h2>Summary Reporters: Example</h2>
 
-<p>Read the Code
-* It&#39;s very approachable
-* It&#39;s very funny</p>
+<h3>Initialization</h3>
+<pre><code class='prettyprint ruby'>module Minitest
+  def self.plugin_vocal_reporter_init(options)
+    self.reporter << VocalReporter.new(options[:io], options)
+  end
+</code></pre></div>
+      <div class='step' >
+    
+<h2>Summary Reporters: Example</h2>
+<pre><code class='prettyprint ruby'>class VocalReporter < StatisticsReporter
+  def report
+    super 
+
+    percentage = failures / count.to_f * 100.0
+
+    if self.failures > 0
+      message = "#{count} tests run with #{failures} failures."
+      if percentage > 50.0
+        message << " Are you even trying?"
+      else
+        message << " That kinda sucks"
+      end
+    else
+      message = "%d tests run with no failures. You rock!" % self.count
+    end
+    `say #{message}`
+  end
+end
+</code></pre></div>
+      <div class='step' >
+    
+<h2>Summary Reporters</h2>
+
+<h3>Other Ideas</h3>
+
+<ul>
+<li>Track the results
+
+<ul>
+<li>See percentages and who&#39;s doing the best with testing</li>
+</ul></li>
+<li>Output to USB lights or other device</li>
+<li>Create your own Continuous Integration (CI) setup </li>
+<li>Gamify the results</li>
+</ul>
+</div>
+      <div class='step' >
+    
+<h1>Concluding Thoughts</h1>
+
+<ul>
+<li>Extending Minitest is just as easy as Minitest itself</li>
+<li>It&#39;s simplicity makes it fun to play with<br></li>
+<li>Read the code. No, really.</li>
+</ul>
 
       </div>
     <script src="js/impress.js"></script>
