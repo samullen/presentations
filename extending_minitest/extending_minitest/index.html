@@ -71,12 +71,31 @@
 <li>I never felt like I was using Rspec to it&#39;s full potential</li>
 </ul></li>
 <li>It&#39;s fast!</li>
+<li>The code is &quot;easy&quot; to read</li>
 <li>It&#39;s easy to hack</li>
 </ul>
 </div>
       <div class='step' >
     
 <h1>Adding Assertions and Expectations</h1>
+</div>
+      <div class='step' >
+    
+<h2>What is an Assertion or Expectation?</h2>
+
+<ul>
+<li>A construct used in testing to determine if results match the expectations</li>
+<li>Assertion examples:
+
+<ul>
+<li><code class='inline prettyprint'>assert_includes</code>, <code class='inline prettyprint'>assert_nil</code>, <code class='inline prettyprint'>assert_match</code></li>
+</ul></li>
+<li>Expectation examples:
+
+<ul>
+<li><code class='inline prettyprint'>must_include</code>, <code class='inline prettyprint'>must_be_nil</code>, <code class='inline prettyprint'>must_match</code></li>
+</ul></li>
+</ul>
 </div>
       <div class='step' >
     
@@ -114,9 +133,8 @@ end
       <div class='step' >
     
 <h2>Adding the Expectation</h2>
-
-<h3><code class='inline prettyprint'>infect_an_assertion</code></h3>
 <pre><code class='prettyprint ruby'>class Minitest::Assertion
+
   infect_an_assertion :assert_admin, :must_be_admin, :unary
 
   infect_an_assertion :refute_admin, :wont_be_admin, :unary
@@ -146,110 +164,13 @@ User.new(role: "admin").must_be_admin
 <li>Flips the order of the method call
 
 <ul>
-<li>Example: <code class='inline prettyprint'>must_include</code></li>
+<li>Example: <code class='inline prettyprint'>must_include</code>, <code class='inline prettyprint'>must_be_empty</code>, <code class='inline prettyprint'>must_be_nil</code></li>
 </ul></li>
 </ul>
 </div>
       <div class='step' >
     
 <h1>Minitest Plugins</h1>
-</div>
-      <div class='step' >
-    
-<h2>How Minitest 5 Works</h2>
-</div>
-      <div class='step' >
-    
-<h2>include &quot;minitest/autorun&quot;</h2>
-<pre><code class='prettyprint ruby'># minitest.rb
-
-require "minitest"
-require "minitest/spec"
-require "minitest/mock"
-
-Minitest.autorun
-</code></pre></div>
-      <div class='step' >
-    
-<h2>At Exit</h2>
-<pre><code class='prettyprint ruby'># minitest.rb
-
-def self.autorun
-  at_exit {
-    next if $! and not $!.kind_of? SystemExit
-
-    exit_code = nil
-
-    at_exit {
-      @@after_run.reverse_each(&:call)
-      exit exit_code || false
-    }
-
-    exit_code = Minitest.run ARGV # <--
-  } unless @@installed_at_exit
-  @@installed_at_exit = true
-end
-</code></pre></div>
-      <div class='step' >
-    
-<h2>Loading Plugins</h2>
-<pre><code class='prettyprint ruby'># minitest.rb
-
-def self.run args = []
-  self.load_plugins # <-- key
-
-  options = process_args args
-
-  reporter = CompositeReporter.new
-  reporter << ProgressReporter.new(options[:io], options)
-  reporter << SummaryReporter.new(options[:io], options)
-
-  self.reporter = reporter # make it available to plugins
-  self.init_plugins options # <-- key
-
-  ...
-
-end
-</code></pre></div>
-      <div class='step' >
-    
-<h2>From Where Does it Load Plugins?</h2>
-<pre><code class='prettyprint ruby'>def self.load_plugins # :nodoc:
-  return unless self.extensions.empty?
-
-  seen = {}
-
-  Gem.find_files("minitest/*_plugin.rb").each do |plugin_path|
-    # find_files reads from $LOAD_PATH
-    name = File.basename plugin_path, "_plugin.rb"
-
-    next if seen[name]
-    seen[name] = true
-
-    require plugin_path
-    self.extensions << name
-  end
-end
-</code></pre></div>
-      <div class='step' >
-    
-<h2>Summarized</h2>
-
-<ol>
-<li>include &#39;minitest/autorun&#39; </li>
-<li>starts up via <code class='inline prettyprint'>at_exit</code></li>
-<li>Runs Minitest::run
-
-<ol>
-<li>Read in external plugins</li>
-<li>Load Minitest&#39;s reporters</li>
-<li>Initialize external plugins</li>
-</ol></li>
-</ol>
-</div>
-      <div class='step' >
-    
-<h1>Creating Extensions</h1>
 </div>
       <div class='step' >
     
