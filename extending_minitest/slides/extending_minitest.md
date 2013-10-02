@@ -31,6 +31,7 @@ Author: Samuel Mullen
 * It's easy to learn
   * I never felt like I was using Rspec to it's full potential
 * It's fast!
+* The code is "easy" to read
 * It's easy to hack
 
 ---
@@ -38,6 +39,16 @@ Author: Samuel Mullen
 # Adding Assertions and Expectations
 
 ---
+
+## What is an Assertion or Expectation?
+
+* A construct used in testing to determine if results match the expectations
+* Assertion examples:
+  * `assert_includes`, `assert_nil`, `assert_match`
+* Expectation examples:
+  * `must_include`, `must_be_nil`, `must_match`
+
+--- 
 
 ## Why would you want to add new Assertions and Expectations?
 
@@ -70,10 +81,10 @@ end
 ---
 
 ## Adding the Expectation
-### `infect_an_assertion`
 
 ``` ruby
 class Minitest::Assertion
+
   infect_an_assertion :assert_admin, :must_be_admin, :unary
 
   infect_an_assertion :refute_admin, :wont_be_admin, :unary
@@ -100,7 +111,7 @@ User.new(role: "admin").must_be_admin
 * just "truthy" values
   * could be `true`, `1`, or even `:foo` 
 * Flips the order of the method call
-  * Example: `must_include`
+  * Example: `must_include`, `must_be_empty`, `must_be_nil`
 
 ---
 
