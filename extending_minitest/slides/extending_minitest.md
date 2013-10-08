@@ -3,27 +3,10 @@ Title: Extending Minitest 5
 Author: Samuel Mullen
 ---
 
-# Extending Minitest
+# Extending Minitest&nbsp;5
 ## Samuel Mullen
 
 ---
-
-## Extending Minitest 5
-
-* New assertions and expectations
-* Plugins
-  * Progress Reporters
-  * Statistics Reporters
-
----
-
-## Note:
-
-* I'm assuming some familiarity with testing
-* I will be focusing on Minitest::Spec
-  * i.e. Expectations
-
---- 
 
 ## Reasons I use Minitest 
 
@@ -36,33 +19,51 @@ Author: Samuel Mullen
 
 ---
 
+## What we'll cover
+
+* New assertions and expectations
+* Plugins
+  * Progress Reporters
+  * Statistics Reporters
+
+---
+
 # Adding Assertions and Expectations
 
 ---
 
 ## What is an Assertion or Expectation?
 
-* A construct used in testing to determine if results match the expectations
+* A construct used in testing to determine if results match what is expected
 * Assertion examples:
-  * `assert_includes`, `assert_nil`, `assert_match`
+  * `assert_equal`, `assert_includes`, `assert_nil`, `assert_match`
+  * `refute_equal`, `refute_includes`, `refute_nil`, `refute_match`
 * Expectation examples:
-  * `must_include`, `must_be_nil`, `must_match`
+  * `must_equal`, `must_include`, `must_be_nil`, `must_match`
+  * `wont_equal`, `wont_include`, `wont_be_nil`, `wont_match`
 
 --- 
 
 ## Why would you want to add new Assertions and Expectations?
 
 * Readability
+* It points out specifically what is being tested
+  * In the case below it's `some_decimal` not `round`
 * It's DRYer
 * It's less prone to errors
-  * `some_decimal.must_round_to 3`
-  * ... is more readable than ...
-  * `some_decimal.round.must_equal 3`
+
+``` ruby
+some_decimal.must_round_to 3
+
+# ... is more readable than ...
+
+some_decimal.round.must_equal 3
+```
 
 ---
 
-## Adding the new Assertion
-### It's just "monkey patching"
+## Adding a New Assertion
+### Step 1: Positive and Negative Check
 
 ``` ruby
 class Minitest::Assertion
@@ -80,7 +81,8 @@ end
 
 ---
 
-## Adding the Expectation
+## Adding a New Assertion
+### Step 2: Add the Expectation
 
 ``` ruby
 class Minitest::Assertion
@@ -94,23 +96,37 @@ end
 
 ---
 
-## New Usage
+## Adding a New Assertion
+### New Usage
 
 ``` ruby
-User.new.wont_be_admin
+class User < ActiveRecord::Base
+  def admin?
+    role == "admin"
+  end
+end
 
-User.new(role: "admin").must_be_admin
+admin = User.new(role: "admin")
+user = User.new
+
+assert_admin admin 
+
+refute_admin user
+
+admin.must_be_admin
+
+user.wont_be_admin
 ```
 
 ---
 
 ## Expectation Flags
-### :unary and :reverse
+### `:unary` and `:reverse`
 
 * Most Assertions and Expectations won't use them
 * just "truthy" values
   * could be `true`, `1`, or even `:foo` 
-* Flips the order of the method call
+* Flips the argument order in the method's logic
   * Example: `must_include`, `must_be_empty`, `must_be_nil`
 
 ---
@@ -121,12 +137,13 @@ User.new(role: "admin").must_be_admin
 
 ## Conventions
 
-* Files must reside under a `minitest` directory
-  * Directory must be part of `$LOAD_PATH`
-  * `$LOAD_PATH << path/to/application/lib`
+* Files must reside under a directory named `minitest`
+  * That directory must be part of `$LOAD_PATH`
+    * `$LOAD_PATH << path/to/application/dir`
 * File names must end with `_plugin.rb`
 * Plugins must have at least a `plugin_example_init` method
 * A `plugin_example_options` method can be added to handle added options
+* Ignore everything above if you are overriding Minitest methods and classes
 
 ---
 
@@ -136,7 +153,7 @@ User.new(role: "admin").must_be_admin
 
 ## Progress Reporters: The Hard Way 
 
-### Section 1: Appetizers
+### Setup
 
 ``` ruby
 module Minitest
@@ -160,7 +177,7 @@ module Minitest
 
 ## Progress Reporters: The Hard Way 
 
-### Section 2: Main course
+### Main focus
 
 ``` ruby
     def print(o)
@@ -183,7 +200,7 @@ module Minitest
 
 ## Progress Reporters: The Hard Way 
 
-### Section 3: Leftovers
+### Leftovers
 
 ``` ruby
     def puts(*o)
@@ -231,8 +248,8 @@ end
 ## Summary Reporters
 
 * Output the results of the test run
-* Run after the `ProgressReporter`
-* Generally subclassed from `StatisticsReporter`
+* Run after the `Minitest::ProgressReporter`
+* Generally subclassed from `Minitest::StatisticsReporter`
 
 ---
 
@@ -278,15 +295,18 @@ end
 ### Other Ideas
 
 * Track the results
-  * See percentages and who's doing the best with testing
-* Output to USB lights or other device
-* Create your own Continuous Integration (CI) setup 
 * Gamify the results
+* Output to USB lights or other devices
+* Create your own Continuous Integration (CI) setup 
 
 --- 
 
-# Concluding Thoughts
+## Concluding Thoughts
 
 * Extending Minitest is just as easy as Minitest itself
-* It's simplicity makes it fun to play with  
+* Minitest simplicity makes it fun to play with  
 * Read the code. No, really.
+
+---
+
+# Questions?

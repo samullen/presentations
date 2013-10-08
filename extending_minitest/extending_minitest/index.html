@@ -28,36 +28,9 @@
     <div id="impress">
     <div class='step' >
     
-<h1>Extending Minitest</h1>
+<h1>Extending Minitest&nbsp;5</h1>
 
 <h2>Samuel Mullen</h2>
-</div>
-      <div class='step' >
-    
-<h2>Extending Minitest 5</h2>
-
-<ul>
-<li>New assertions and expectations</li>
-<li>Plugins
-
-<ul>
-<li>Progress Reporters</li>
-<li>Statistics Reporters</li>
-</ul></li>
-</ul>
-</div>
-      <div class='step' >
-    
-<h2>Note:</h2>
-
-<ul>
-<li>I&#39;m assuming some familiarity with testing</li>
-<li>I will be focusing on Minitest::Spec
-
-<ul>
-<li>i.e. Expectations</li>
-</ul></li>
-</ul>
 </div>
       <div class='step' >
     
@@ -77,6 +50,20 @@
 </div>
       <div class='step' >
     
+<h2>What we&#39;ll cover</h2>
+
+<ul>
+<li>New assertions and expectations</li>
+<li>Plugins
+
+<ul>
+<li>Progress Reporters</li>
+<li>Statistics Reporters</li>
+</ul></li>
+</ul>
+</div>
+      <div class='step' >
+    
 <h1>Adding Assertions and Expectations</h1>
 </div>
       <div class='step' >
@@ -84,16 +71,18 @@
 <h2>What is an Assertion or Expectation?</h2>
 
 <ul>
-<li>A construct used in testing to determine if results match the expectations</li>
+<li>A construct used in testing to determine if results match what is expected</li>
 <li>Assertion examples:
 
 <ul>
-<li><code class='inline prettyprint'>assert_includes</code>, <code class='inline prettyprint'>assert_nil</code>, <code class='inline prettyprint'>assert_match</code></li>
+<li><code class='inline prettyprint'>assert_equal</code>, <code class='inline prettyprint'>assert_includes</code>, <code class='inline prettyprint'>assert_nil</code>, <code class='inline prettyprint'>assert_match</code></li>
+<li><code class='inline prettyprint'>refute_equal</code>, <code class='inline prettyprint'>refute_includes</code>, <code class='inline prettyprint'>refute_nil</code>, <code class='inline prettyprint'>refute_match</code></li>
 </ul></li>
 <li>Expectation examples:
 
 <ul>
-<li><code class='inline prettyprint'>must_include</code>, <code class='inline prettyprint'>must_be_nil</code>, <code class='inline prettyprint'>must_match</code></li>
+<li><code class='inline prettyprint'>must_equal</code>, <code class='inline prettyprint'>must_include</code>, <code class='inline prettyprint'>must_be_nil</code>, <code class='inline prettyprint'>must_match</code></li>
+<li><code class='inline prettyprint'>wont_equal</code>, <code class='inline prettyprint'>wont_include</code>, <code class='inline prettyprint'>wont_be_nil</code>, <code class='inline prettyprint'>wont_match</code></li>
 </ul></li>
 </ul>
 </div>
@@ -103,21 +92,25 @@
 
 <ul>
 <li>Readability</li>
-<li>It&#39;s DRYer</li>
-<li>It&#39;s less prone to errors
+<li>It points out specifically what is being tested
 
 <ul>
-<li><code class='inline prettyprint'>some_decimal.must_round_to 3</code></li>
-<li>... is more readable than ...</li>
-<li><code class='inline prettyprint'>some_decimal.round.must_equal 3</code></li>
+<li>In the case below it&#39;s <code class='inline prettyprint'>some_decimal</code> not <code class='inline prettyprint'>round</code></li>
 </ul></li>
+<li>It&#39;s DRYer</li>
+<li>It&#39;s less prone to errors</li>
 </ul>
-</div>
+<pre><code class='prettyprint ruby'>some_decimal.must_round_to 3
+
+# ... is more readable than ...
+
+some_decimal.round.must_equal 3
+</code></pre></div>
       <div class='step' >
     
-<h2>Adding the new Assertion</h2>
+<h2>Adding a New Assertion</h2>
 
-<h3>It&#39;s just &quot;monkey patching&quot;</h3>
+<h3>Step 1: Positive and Negative Check</h3>
 <pre><code class='prettyprint ruby'>class Minitest::Assertion
   def assert_admin(obj, msg=nil)
     msg = message(msg, "") { diff true, obj.admin? }
@@ -132,7 +125,9 @@ end
 </code></pre></div>
       <div class='step' >
     
-<h2>Adding the Expectation</h2>
+<h2>Adding a New Assertion</h2>
+
+<h3>Step 2: Add the Expectation</h3>
 <pre><code class='prettyprint ruby'>class Minitest::Assertion
 
   infect_an_assertion :assert_admin, :must_be_admin, :unary
@@ -143,16 +138,31 @@ end
 </code></pre></div>
       <div class='step' >
     
-<h2>New Usage</h2>
-<pre><code class='prettyprint ruby'>User.new.wont_be_admin
+<h2>Adding a New Assertion</h2>
 
-User.new(role: "admin").must_be_admin
+<h3>New Usage</h3>
+<pre><code class='prettyprint ruby'>class User < ActiveRecord::Base
+  def admin?
+    role == "admin"
+  end
+end
+
+admin = User.new(role: "admin")
+user = User.new
+
+assert_admin admin 
+
+refute_admin user
+
+admin.must_be_admin
+
+user.wont_be_admin
 </code></pre></div>
       <div class='step' >
     
 <h2>Expectation Flags</h2>
 
-<h3>:unary and :reverse</h3>
+<h3><code class='inline prettyprint'>:unary</code> and <code class='inline prettyprint'>:reverse</code></h3>
 
 <ul>
 <li>Most Assertions and Expectations won&#39;t use them</li>
@@ -161,7 +171,7 @@ User.new(role: "admin").must_be_admin
 <ul>
 <li>could be <code class='inline prettyprint'>true</code>, <code class='inline prettyprint'>1</code>, or even <code class='inline prettyprint'>:foo</code> </li>
 </ul></li>
-<li>Flips the order of the method call
+<li>Flips the argument order in the method&#39;s logic
 
 <ul>
 <li>Example: <code class='inline prettyprint'>must_include</code>, <code class='inline prettyprint'>must_be_empty</code>, <code class='inline prettyprint'>must_be_nil</code></li>
@@ -177,15 +187,16 @@ User.new(role: "admin").must_be_admin
 <h2>Conventions</h2>
 
 <ul>
-<li>Files must reside under a <code class='inline prettyprint'>minitest</code> directory
+<li>Files must reside under a directory named <code class='inline prettyprint'>minitest</code>
 
 <ul>
-<li>Directory must be part of <code class='inline prettyprint'>$LOAD_PATH</code></li>
-<li><code class='inline prettyprint'>$LOAD_PATH << path/to/application/lib</code></li>
+<li>That directory must be part of <code class='inline prettyprint'>$LOAD_PATH</code></li>
+<li><code class='inline prettyprint'>$LOAD_PATH << path/to/application/dir</code></li>
 </ul></li>
 <li>File names must end with <code class='inline prettyprint'>_plugin.rb</code></li>
 <li>Plugins must have at least a <code class='inline prettyprint'>plugin_example_init</code> method</li>
 <li>A <code class='inline prettyprint'>plugin_example_options</code> method can be added to handle added options</li>
+<li>Ignore everything above if you are overriding Minitest methods and classes</li>
 </ul>
 </div>
       <div class='step' >
@@ -196,7 +207,7 @@ User.new(role: "admin").must_be_admin
     
 <h2>Progress Reporters: The Hard Way</h2>
 
-<h3>Section 1: Appetizers</h3>
+<h3>Setup</h3>
 <pre><code class='prettyprint ruby'>module Minitest
   def self.plugin_color_reporter_init(options)
     io = ColorReporter.new(options[:io])
@@ -217,7 +228,7 @@ User.new(role: "admin").must_be_admin
     
 <h2>Progress Reporters: The Hard Way</h2>
 
-<h3>Section 2: Main course</h3>
+<h3>Main focus</h3>
 <pre><code class='prettyprint ruby'>    def print(o)
       case o
       when "." then
@@ -237,7 +248,7 @@ User.new(role: "admin").must_be_admin
     
 <h2>Progress Reporters: The Hard Way</h2>
 
-<h3>Section 3: Leftovers</h3>
+<h3>Leftovers</h3>
 <pre><code class='prettyprint ruby'>    def puts(*o)
       io.puts(*o)
     end
@@ -280,8 +291,8 @@ end
 
 <ul>
 <li>Output the results of the test run</li>
-<li>Run after the <code class='inline prettyprint'>ProgressReporter</code></li>
-<li>Generally subclassed from <code class='inline prettyprint'>StatisticsReporter</code></li>
+<li>Run after the <code class='inline prettyprint'>Minitest::ProgressReporter</code></li>
+<li>Generally subclassed from <code class='inline prettyprint'>Minitest::StatisticsReporter</code></li>
 </ul>
 </div>
       <div class='step' >
@@ -324,25 +335,25 @@ end
 <h3>Other Ideas</h3>
 
 <ul>
-<li>Track the results
-
-<ul>
-<li>See percentages and who&#39;s doing the best with testing</li>
-</ul></li>
-<li>Output to USB lights or other device</li>
-<li>Create your own Continuous Integration (CI) setup </li>
+<li>Track the results</li>
 <li>Gamify the results</li>
+<li>Output to USB lights or other devices</li>
+<li>Create your own Continuous Integration (CI) setup </li>
 </ul>
 </div>
       <div class='step' >
     
-<h1>Concluding Thoughts</h1>
+<h2>Concluding Thoughts</h2>
 
 <ul>
 <li>Extending Minitest is just as easy as Minitest itself</li>
-<li>It&#39;s simplicity makes it fun to play with<br></li>
+<li>Minitest simplicity makes it fun to play with<br></li>
 <li>Read the code. No, really.</li>
 </ul>
+</div>
+      <div class='step' >
+    
+<h1>Questions?</h1>
 
       </div>
     <script src="js/impress.js"></script>
