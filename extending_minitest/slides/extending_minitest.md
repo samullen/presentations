@@ -4,7 +4,6 @@ Author: Samuel Mullen
 ---
 
 # Extending Minitest&nbsp;5
-## Samuel Mullen
 
 ---
 
