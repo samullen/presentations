@@ -35,6 +35,8 @@
 
 # Arel
 
+^ With arel, we can plug some of those holes
+
 ---
 
 ## An Abstract Syntax Tree (AST)
@@ -70,9 +72,7 @@ SELECT "posts".*
 
 # Why Should I Use Arel?
 
----
-
-## Reliable
+* Reliable
 
 ---
 
@@ -86,7 +86,9 @@ Post.joins(:comments).where("updated_at > ?", 1.year.ago)
 
 ---
 
-## Reliable
+# Why Should I Use Arel?
+
+* Reliable
 
 ^ * Column names are used across tables. (id, created\_at, and updated\_at)
 * unless they are properly qualified, it could result in an “ambiguous column reference” error. 
@@ -95,20 +97,33 @@ Post.joins(:comments).where("updated_at > ?", 1.year.ago)
 
 ---
 
-## Simple
+# Why Should I Use Arel?
+
+* Reliable
+* Simple
 
 ^ * The object oriented nature of Arel allows queries to be more easily broken up into smaller more manageable chunks.
 * Clear delineation for joins, unions, and constraints
 
 ---
 
-## Flexible
+# Why Should I Use Arel?
+
+* Reliable
+* Simple
+* Flexible
 
 ^ * It is easier and more consistent to build up your query using Arel methods rather than using string interpolation and concatenation.
 
 ---
 
 # Arel Foundations
+
+---
+
+## Arel::Table
+
+* The primary class you will act upon and through
 
 ---
 
@@ -141,8 +156,6 @@ Post.arel_table
 
 ## Convenience Method
 
-Add this private class method to access the `arel_table` more conveniently
-
 ```ruby
 def self.post
   self.arel_table
@@ -150,6 +163,8 @@ end
 # Force the class method to be private (optional)
 private_class_method :post 
 ```
+
+^ Add methods like this to your models to access the arel\_table more easily
 
 ---
 
@@ -164,6 +179,20 @@ Post.arel_table[:updated_at]
 ```
 
 --- 
+
+## Arel Attribute
+
+* Represents a field within a table
+
+---
+
+## Arel Attribute
+
+* Represents a field within a table
+* Primary usage:
+  * Specify fields to act upon
+
+---
 
 ## Arel Attribute
 
@@ -222,13 +251,19 @@ https://github.com/rails/arel/blob/master/lib/arel/predications.rb
 post[:published_at].gt(1.year.ago).to_sql
 # => posts.published_at > '2013-06-23 09:56:14.101954'
 
-post[:title].matches("Lorem ipsum%").to_sql
-# => comments.flagged ILIKE 'Lorem ipsum%'
+post[:title].matches("Lorem ipsum%")
+# => posts.title ILIKE 'Lorem ipsum%'
 
-post[:created_at].lt(post[:updated_at).to_sql
+post[:created_at].lt(post[:updated_at])
 # => posts.created_at < posts.updated_at
+```
 
-Post.where(post[:published_at].lt(2.weeks.ago)
+---
+
+## Examples (cont'd)
+
+``` ruby
+Post.where(post[:published_at].lt(2.weeks.ago))
 # => SELECT "posts".* 
 #      FROM posts 
 #     WHERE posts.published_at < '2014-06-09 09:56:14.101954'
@@ -240,15 +275,19 @@ Post.where(post[:published_at].lt(2.weeks.ago)
 ## Combining Predicates
 ### OR and AND
 
+---
+
+### Examples
+
 ``` ruby
 post[:published_at].gt(1.year.ago).or(
-  post[:created_at].lt(post[:updated_at)).to_sql
+  post[:created_at].lt(post[:updated_at))
 
 # => posts.published_at > '2013-06-23 09:56:14.101954' 
 #      OR posts.created_at < posts.updated_at
 
 post[:created_at].gt(1.year.ago).and(
-  post[:updated_at].gt(1.week.ago)).to_sql
+  post[:updated_at].gt(1.week.ago))
 
 # => posts.created_at > '2013-06-23 09:56:14.101954' 
 #      OR posts.updated_at > '2014-06-16 09:56:14.101999'
@@ -259,7 +298,7 @@ post[:created_at].gt(1.year.ago).and(
 # Named Functions
 
 ^ * database specific function calls
-^ * Generally used with the #select method
+* Generally used with the #select method
 
 ---
 
@@ -284,20 +323,30 @@ Arel::Nodes::NamedFunction.new(
 
 --- 
 
-## Named Functions
-### Example
+## Example
 
 ``` ruby
-Post.select(
+posts = Post.select(
   post[Arel.star],
   Arel::Nodes::NamedFunction.new("md5", [post[:title], "md5_title")
 )
+
+# SELECT posts.*, md5(posts.title) AS md5_title
+#   FROM posts
+
+posts.first.md5_title
+
+# => "2260b669d1c515bc489704f350fe023f"
+
 ```
+
+^ Now we can access md5\_title as if it were an attribute
+
 ---
 
 # Unions
 
-^ Used to combine or intersect two sets of data
+^ ^ Used to combine or intersect two sets of data
 ^ completed in two steps: defining the union, and executing it
 ^ usually done from two different tables, but with the same column types
 
@@ -309,10 +358,17 @@ Post.select(
 new_and_updated = Post.where(:published_at => nil).
           union(Post.where(:draft => true))
 ```
-^ get all unpublished and all drafts
+^ ^ get all unpublished and all drafts
 ^ You would normally use an "OR" here 
 
 ---
+
+## Defining the Union
+
+``` ruby
+new_and_updated = Post.where(:published_at => nil).
+          union(Post.where(:draft => true))
+```
 
 ## Executing the Union
 
@@ -387,9 +443,10 @@ Post.joins(author_join, comment_join, ...)
 
 # Final Thoughts
 
-^ Documentation and examples are getting better
-^ using the convenience method helps readability a lot
-^ Especially useful when combined with Query Objects
+^ I wanted to cover the 90% of what we use
+^ Docs and examples are getting better
+^ use the convenience method
+^ Especially useful with Query Objects
 ^ See CodeClimate's "7 Patterns to Refactor Fat ActiveRecord Models"
 
 ---
@@ -399,3 +456,4 @@ Post.joins(author_join, comment_join, ...)
 t: samullen
 g: samullen
 w: samuelmullen.com
+p: github.com/samullen/presentations
