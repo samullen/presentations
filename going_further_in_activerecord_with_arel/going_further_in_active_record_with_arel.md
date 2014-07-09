@@ -1,6 +1,10 @@
 # Going Further in ActiveRecord 
 # with Arel
 
+---
+
+![fit](nomemes.jpg)
+
 --- 
 
 # In the Beginning
@@ -76,10 +80,11 @@ SELECT "posts".*
 
 ---
 
-### What's wrong with this?
+## What's wrong with this?
 
 ``` ruby
-Post.joins(:comments).where("updated_at > ?", 1.year.ago)
+Post.joins(:comments).
+  where("updated_at > ?", 1.year.ago)
 ```
 
 ^ I'll give you and few moments
@@ -208,7 +213,7 @@ Post.arel_table[:updated_at]
 Access a table's attribute by passing its symbol to the Arel table
 
 ``` ruby
-post[:updated_at] # i.e. Post.arel_table[:updated_at]
+Post.arel_table[:updated_at] # convenience: post[:updated_at]
 
 => #<struct Arel::Attributes::Attribute
  relation=
@@ -290,7 +295,7 @@ post[:created_at].gt(1.year.ago).and(
   post[:updated_at].gt(1.week.ago))
 
 # => posts.created_at > '2013-06-23 09:56:14.101954' 
-#      OR posts.updated_at > '2014-06-16 09:56:14.101999'
+#      AND posts.updated_at > '2014-06-16 09:56:14.101999'
 
 ```
 ---
@@ -306,16 +311,20 @@ post[:created_at].gt(1.year.ago).and(
 
 ``` ruby
 Arel::Nodes::NamedFunction.new(<function>, <Array>, [alias])
+```
 
-# Example
+---
 
+## Example
+
+``` ruby
 Arel::Nodes::NamedFunction.new(
-  "md5", [Post.arel_table[:title]]
+  "md5", [post[:title]]
 )
  # => md5(posts.title)
 
 Arel::Nodes::NamedFunction.new(
-  "md5", [Post.arel_table[:title]], "md5_title"
+  "md5", [post[:title]], "md5_title"
 )
  # => md5(posts.title) AS md5_title
 
@@ -323,7 +332,7 @@ Arel::Nodes::NamedFunction.new(
 
 --- 
 
-## Example
+## Example (cont'd)
 
 ``` ruby
 posts = Post.select(
@@ -448,6 +457,10 @@ Post.joins(author_join, comment_join, ...)
 ^ use the convenience method
 ^ Especially useful with Query Objects
 ^ See CodeClimate's "7 Patterns to Refactor Fat ActiveRecord Models"
+
+---
+
+![fit](ilie.jpg)
 
 ---
 
