@@ -309,12 +309,6 @@ your head too.
 
 ---
 
-# How did we get in this mess?
-
-???
-
----
-
 # The Truth About
 # Legacy Code
 
@@ -322,18 +316,149 @@ your head too.
 
 ---
 
-# Legacy Code
-# Isn't a Problem
+# Legacy code...
+
+* Isn't going anywhere
+* Got your project/organization where it is today
+* Continues to bring in revenue
+* Continues to pay the bills
+
+^ We may turn up our nose at the pile of spaghetti code sitting in front of us.
+^ But it's that spaghetti which feeds the business.
 
 ---
 
-# Legacy Code
-# Is an Opportunity
+# **Legacy Code**
+# Isn't a *Problem*
+
+^ The problem with legacy code is that it’s complicated, brittle, demotivating, and it makes everything harder to do. 
+^ But problems have solutions. 
+^ Problems present ... opportunities.
 
 ---
 
-* Invest in your culture
-* Invest in your code base
-* The value/opportunity
-* Questions?
+# **Legacy Code**
+# Is an *Opportunity*
 
+^ The first opportunity presented by legacy code is...
+
+---
+
+# The **Opportunity** to *Add Value*
+
+^ Oftentimes, when we go to management to get approval to improve the existing code base, we speak in a language management doesn't understand.
+^ We say things like, "Ugh the codes a mess. It needs to be cleaned up"
+^ "it'll be easier for us to work with"
+^ "it will be faster"
+^ Guess what? Management doesn't care. You need to tell them how it's going to benefit them.
+
+---
+
+# Repairing Legacy Code Adds Value
+
+* Improved Efficiency
+* Reduced Development Costs
+* Lower Barrier to Entry
+* Improved Product Quality
+
+^ Speed improvements are always a good thing
+^ Faster page loads, data processing, deployments all lead to doing more with less.
+^ It used to be that hardware was the big expense. Now we know it's development staff.
+^ Repairing legacy code makes existing developers more productive.
+^ Maybe there isn't a need for that new hire afterall. If there is...
+^ Simpler code reduced the amount of time they need to get up and running.
+^ Finally, How expensive are errors? Does that affect customer churn? Does it require staff to be on call? Do they slow progress? How expensive are errors?
+^ What is the value of a better quality product? 
+^ When your manager asks why they should devote time and resources to fixing the code, they're not being combative, they're looking to you to give them a reasonable justification. Speak they language they understand.
+
+---
+
+# The **Opportunity** to *Learn*
+
+---
+
+> …we’re fortunate to be in a profession where the knowledge and skill of all the masters is right there for us to absorb, embedded in the code they have written. All you have to do is read it…
+> –Alan Skorkin, Why I Love Reading Other People’s Code And You Should Too
+
+^ We all want to grow in our skillset
+^ While the code we maintain may not place us at the "foot of the masters"
+^ We will grow as we struggle to understand it.
+
+---
+
+# Repairing Legacy Code Teaches Us
+
+* Insider Information
+* New Tricks From Old Code
+* We're Better Than That
+
+^
+- What better way to better understand the business than to understand the systems it's built upon?
+- Even in old crufty code, there's something to be learned. It may be a pattern, library, or just a method you've never seen before, but there's something there of value
+- Fixing legacy code demands that you be better than it. You have to first understand what it is that you're fixing. They you have to surpass it in skill and creativity in order to improve it.
+- Story about needing humility.
+- Learning requires humility. If you believe you have nothing to gain from the code you are working on, I guarantee you’ll prove yourself correct. I’ve done it myself. I once inherited a code base from someone I thought to be inferior in skill to myself. While there were many times I was able to improve upon his code, there were an equal number of times when I tried to fix and replace the code only to be met with failure and falling back to the original developer’s solution. It was a long and painful lesson, but I eventually learned from it and am better for it.
+
+---
+
+# Why?
+
+^
+- who here loved lego as a kid? Who still does?
+- How many of you took apart some kind of electronic device?
+- Who here knows how to pick locks?
+- Why did you start working with computers??
+- I believe it's because we love solving problems
+- Because solving problems gives us a bit of a high
+- Because a problem says, "No, you can't".
+- And we get to say, "The hell I can't! Watch me!"
+
+---
+
+# The **Opportunity** to Do What We *Love*
+
+^ 
+- Legacy code gives us the opportunity to do what we love
+- to solve problems.
+- And every problem we solve only feeds our need to solve more.
+
+---
+
+# A Day In the Life
+
+![](a_day_in_the_life.jpg)
+
+^
+- Because the average day for programmers is not spent solving tough problems.
+- It's a form view here, a date calculation there, maybe a new cron process
+- It's rare that we really get challenged.
+
+---
+
+# *Legacy Code* Challenges Us
+
+^
+- Yes, it's a problme which has already been solved
+- But it also asks, "How could you do it better?"
+- Do you even have the chops to understand me?
+- How are you going to respond to that?
+
+---
+
+# Questions have you?
+
+![](questions.jpg)
+
+---
+
+# Thank you!
+
+![fit left](big-p.png)
+
+Samuel Mullen
+
+@samullen
+
+pixelatedworks.com
+
+samuel@pixelatedworks.com
