@@ -8,21 +8,23 @@ theme: Scherzkeks, 7
 
 # Hi!
 
-^ Background
-^ Started running Linux in '97 the same time I started programming professionally
-^ Started web development in '99
-^ Used open source languages and technologies that entire time
-^ Currenty run Pixelated web development shop focused on rescuing legacy projects
-^ Tell you these things...
-^ 1. to keep from getting run out on a rail for running this obviously heretical machine
-^ 2. to let you know I've run across legacy code before. maybe once or twice
-^ In then net 30-45 minutes, we're going to look at 
-^ 1. what legacy code is
-^ 2. why it's bad
-^ 3. the costs associated with it
-^ 4. the opportunities legacy code presents
+![left](avatar.jpg)
 
-^ The first rule of legacy code is...
+^
+- Hi. I'm Samuel Mullen and I'm going to be talking to you today about LEgacy Code. Duh!
+- Background
+- Started running Linux in '97 the same time I started programming professionally
+- Started web development in '99
+- Used open source languages and technologies that entire time
+- Tell you these things...
+- 1. to keep from getting run out of hear for running this obviously heretical machine
+- 2. to let you know I've run across legacy code before. maybe once or twice
+- In then next 30-45 minutes, we're going to look at 
+- 1. what legacy code is
+- 2. why it's bad
+- 3. the costs associated with it
+- 4. the opportunities legacy code presents
+- The first rule of legacy code is...
 
 ---
 
@@ -30,7 +32,7 @@ theme: Scherzkeks, 7
 
 ---
 
-# Legacy Code
+# *Legacy Code*
 ## What is it?
 
 ^ As a programmer, you'll eventually have to deal with legacy code
@@ -55,30 +57,16 @@ theme: Scherzkeks, 7
 
 ---
 
-# Why Do We Hate Legacy Code?
-
-* Focused on what's next
-* It doesn't "feel" like contributing
-* Arrogance
-
-^ Why do these images come to mind?
-^ Working with what's next allows us to play with new technologies. Legacy code doesn't.
-^ Just keeping somehting working doesn't feel like making a difference.
-^ it feels like we've been sidelined because our "idiot boss" doesn't recognize our potential and ability
-^ As you may have gathered from the  title of this presentation, I have a different perspective
-^ But before I get into that, let's get a working definition of what legacy code is
-
----
-
-# Legacy Code
+# *Legacy Code*
 ## Definition
 
-^ When we talk about legacy code, there are two definitions we're working with 
-^ Literal, and a more practical 
+^
+- When we talk about legacy code, there are two definitions we're working with 
+- Literal, and a more practical 
 
 ---
 
-# The Literal Definition
+# The **Literal** Definition
 
 > Legacy code is source code that relates to a no-longer supported or manufactured operating system or other computer technology. The term was first used by Computer Scientist George Olivetti to describe code maintained by an administrator that did not develop the code.  
 -- Wikipedia - Legacy Code
@@ -87,7 +75,7 @@ theme: Scherzkeks, 7
 
 ---
 
-# The Practical Definition
+# The **Practical** Definition
 
 > Code without tests is bad code. It doesn’t matter how well written it is; it doesn’t matter how pretty or object-oriented or well-encapsulated it is. With tests, we can change the behavior of our code quickly and verifiably. Without them, we really don’t know if our code is getting better or worse. 
 -- Michael C. Feathers, Working Effectively with Legacy Code
@@ -99,22 +87,40 @@ theme: Scherzkeks, 7
 > Legacy code is simply code without tests. 
 -- Michael C. Feathers, Working Effectively with Legacy Code
 
-^ You may disagree with his definition 
-^ consider: when code is covered by a suite of tests, it allows us to make changes and see what in our project is affected (i.e., what breaks). 
-^ Without test coverage, making changes can produce unexpected results
-^ It can also produce unexpected results in code elsewhere in the project.
-^ so really...
+^
+- You may disagree with his definition 
+- consider: when code is covered by a suite of tests, it allows us to make changes and see what in our project is affected (i.e., what breaks). 
+- Without test coverage, making changes can produce unexpected results
+- It can also produce unexpected results in code elsewhere in the project.
+- so really...
 
 --- 
 
-> Legacy code is code which is difficult or unsafe to change.
+> Legacy code is code which is difficult or unsafe to change.  
+> –Me
 
 ^ Because you have no real idea how that change is going to affect the rest of the system
 
 ---
 
-# The Problem with
-# Legacy Code
+# Why Do We **Hate** *Legacy Code*?
+
+* Focused on what's next
+* It doesn't "feel" like contributing
+* Arrogance
+
+^ 
+- Why do these images come to mind?
+- Working with what's next allows us to play with new technologies. Legacy code doesn't.
+- Just keeping somehting working doesn't feel like making a difference.
+- it feels like we've been sidelined because our "idiot boss" doesn't recognize our potential and ability
+- But these are all "feelings", and we like to think we deal strictly with logic
+- Let's look at some objective reasons why Legacy code is bad
+
+---
+
+# The **Problem** with
+# *Legacy Code*
 
 ^ I thinnk there's a lot of opportunity in legacy code
 ^ But before we can talk about that
@@ -128,23 +134,15 @@ theme: Scherzkeks, 7
 
 ---
 
-^ Show a complicated block of code
-
-![](example.jpb)
+![fit](ugly_code.png)
 
 ^ This is a single method
 ^ Don't worry about reading it. I just want to show you the shape
-^ There are n if statements, y loops, and it's z levels deep at deepest nesting
+^ It's almost 220 lines long
+^ There are 19 if statements, 6 loops, and it's 7 levels deep at deepest nesting
+^ It has a cyclomatic complexity score of over 520
 ^ Who here think they can keep this in their head at once?
 ^ Who even wants to try?
-^ Oh, and here's all the other methods it's calling. You have to keep those in
-your head too.
-
----
-
-^ Show it is connected to/from other blocks
-
-![](example.jpg)
 
 ---
 
@@ -157,10 +155,9 @@ your head too.
 |20-40|Very complex Code<br>Low Testability<br/>Cost and Effort are high|
 |>40|Not at all testable<br/>Very high Cost and Effort|
 
-^ Is a simple heuristic to measure code complexity
-^ It's calculated by adding 1 for each branch of logic
-^ Each 'if', 'else', 'while', 'case', etc. adds 1 to the complexity
-^ This code has a score of x
+^ Is a heuristic to measure code complexity
+^ Every branch of logic, loop, call to external resources, possible exits all add to the score.
+^ This code has a score of 520
 ^ What happens if you try to make a change to a block of code like that?
 
 ---
@@ -181,6 +178,8 @@ your head too.
 * Changes will (likely) have unexpected consequences
 * Changes will make it more brittle
 
+^ When you first approach code, give it the benefit of the doubt that it works.
+
 ---
 
 # Wouldn't it be nice
@@ -188,18 +187,17 @@ your head too.
 
 ![left fit](nervous_system.png)
 
-^ So it could tell you when part of it was damaged?
-^ Or wasn't communicating to other areas correctly?
-^ we'll talk about that in a bit
-^ If you're code is complicated and brittle, what's going to happen to your development speed?
+^
+- So it could tell you when part of it was damaged?
+- Or wasn't communicating to other areas correctly?
+- This is why we write tests. Tests give our software a nervous system
+- If you're code is complicated and brittle, what's going to happen to your development speed?
 
 ---
 
 # Legacy Code Slows Development
 
 ![](slomo_punch.jpg)
-
-^ Am I telling you anything you didn't already know?
 
 ---
 
@@ -210,7 +208,6 @@ your head too.
 * To ensure the changes work 
 * To ensure the changes don’t break existing product
 
-^ Okay, who here hates legacy code a little bit more than before I started?
 ^ But the time it takes you to do all these things has its own costs
 
 ---
@@ -222,18 +219,30 @@ your head too.
 
 ---
 
+[.build-lists: false]
+
 # Legacy Code Costs
 
 * Maintenance Costs
 
 > In 2002, the National Institute of Standards and Technology (NIST) estimated that software bugs cost the U.S. economy nearly $60 billion dollars
 
-> [s]oftware developers ... spend approximately 80% of development costs on identifying and correcting defects..."
-
-^ 0.6% of the GDP
-^ The GDP for 2016 was $109 billion
+^
+- in 2016, 0.6% of the GDP would have been $109 billion
 
 ---
+
+[.build-lists: false]
+
+# Legacy Code Costs
+
+* Maintenance Costs
+
+> [s]oftware developers ... spend approximately 80% of development costs on identifying and correcting defects..."
+
+---
+
+[.build-lists: false]
 
 # Legacy Code Costs
 
@@ -248,6 +257,8 @@ your head too.
 
 ---
 
+[.build-lists: false]
+
 # Legacy Code Costs
 
 * Maintenance Costs
@@ -259,6 +270,8 @@ your head too.
 ^ Legacy code slows you down from being able to comply
 
 ---
+
+[.build-lists: false]
 
 # Legacy Code Costs
 
@@ -272,6 +285,8 @@ your head too.
 ^ 'nuff said
 
 ---
+
+[.build-lists: false]
 
 # Legacy Code Costs
 
@@ -304,7 +319,7 @@ your head too.
 ^ I know what it's like to face the Gordian Knot of logic
 ^ To know that the changes I make are going to be small and amount to very little
 ^ Or even still, make things just a bit worse.
-^ To know that there are demands (internal and external) on your to succeed, but only be set up for failure.
+^ To know that there are demands (internal and external) on you to succeed, but only be set up for failure.
 ^ Have I convinced everyone that legacy code is bad yet?
 
 ---
@@ -331,6 +346,8 @@ your head too.
 # **Legacy Code**
 # Isn't a *Problem*
 
+![left](old_lock.jpg)
+
 ^ The problem with legacy code is that it’s complicated, brittle, demotivating, and it makes everything harder to do. 
 ^ But problems have solutions. 
 ^ Problems present ... opportunities.
@@ -340,11 +357,16 @@ your head too.
 # **Legacy Code**
 # Is an *Opportunity*
 
+![right](opendoor.jpg)
+
+
 ^ The first opportunity presented by legacy code is...
 
 ---
 
-# The **Opportunity** to *Add Value*
+# The *Opportunity* to *Add Value*
+
+![](piggybank.jpg)
 
 ^ Oftentimes, when we go to management to get approval to improve the existing code base, we speak in a language management doesn't understand.
 ^ We say things like, "Ugh the codes a mess. It needs to be cleaned up"
@@ -373,7 +395,9 @@ your head too.
 
 ---
 
-# The **Opportunity** to *Learn*
+# The *Opportunity* to *Learn*
+
+![](school.jpg)
 
 ---
 
@@ -415,7 +439,9 @@ your head too.
 
 ---
 
-# The **Opportunity** to Do What We *Love*
+# The *Opportunity* to Do What We *Love*
+
+![](a_day_in_the_life.jpg)
 
 ^ 
 - Legacy code gives us the opportunity to do what we love
@@ -426,11 +452,10 @@ your head too.
 
 # A Day In the Life
 
-![](a_day_in_the_life.jpg)
-
 ^
 - Because the average day for programmers is not spent solving tough problems.
-- It's a form view here, a date calculation there, maybe a new cron process
+- It's updating a database, a date calculation, maybe a new cron process
+- We usually deal with solved problems. We just have to implement them...again.
 - It's rare that we really get challenged.
 
 ---
@@ -438,10 +463,11 @@ your head too.
 # *Legacy Code* Challenges Us
 
 ^
-- Yes, it's a problme which has already been solved
+- Yes, it's a problem which has already been solved
 - But it also asks, "How could you do it better?"
 - Do you even have the chops to understand me?
 - How are you going to respond to that?
+- Are you just going to nest yet another if statement in that pile of spaghetti
 
 ---
 
