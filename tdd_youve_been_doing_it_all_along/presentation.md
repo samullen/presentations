@@ -32,6 +32,10 @@ theme: Scherzkeks, 7
 
 # Lies, *Damned Lies*, and **TDD**
 
+^
+- I'm sure everyone here has heard about TDD
+- I'd like to address some inaccurate thoughts about TDD
+
 ---
 
 # Lies *About* TDD
@@ -45,7 +49,7 @@ theme: Scherzkeks, 7
 - TDD increases initial dev time by 10-30%. 
 - It reduces bugs in production by 40-80%
 - Ruby on Rails, Chrysler Comprehensive Compensation System, Windows 7
-- Lest anyone think I'm unfair
+- Lest anyone think I'm not "fair and balanced"
 
 ---
 
@@ -63,20 +67,45 @@ theme: Scherzkeks, 7
 
 ---
 
-^
-R Jeffries and G Melnik, writing for IEE have reported that TDD helps in decreasing production bugs by 40-80%. Of course, it can add 10-30% to the initial development time and cost but considering the factors like defect fixes, and maintenance it is justified to implement TDD for the first phase of project development. In fact, the benefits of TDD have been tested on real projects by several companies and they found that the process is enormously beneficial.
-
----
-
 # TDD Overview
+
+![left](http://via.placeholder.com/600x1000)
+
+* Write a test for the next bit of functionality you want to add
+* Write the functional code until the test passes
+* Refactor both new and old code to make it well structured
+
+^ 
+- At its simplest...
+- TDD is a dev process used to build software by first writing tests describing what the code should do
+- and *then* writing _only_ the code necessary to make the tests pass
+- More can be said about the process (and has), but that is the core of TDD
 
 ---
 
 # Non-TDD Overview
 
+![left](http://via.placeholder.com/600x1000)
+
+* Determine the expectations for the next bit of functionality to add
+* Write the functional code until it meets your expectations
+* Tweak as necessary as you better understand the problem
+
+^
+- The Non-TDD dev process is what most of use from day one
+- There's nothing formal about, and definitely nothing automated
+- There's a problem, and we create a solution for that problem according to our understanding at the time
+- If you were to codify the process, it would look like this
+
 ---
 
 # You're Already Doing TDD
+
+| Development Step | TDD | Not TDD |
+| :---: | :---: | :---: |
+| **Determine Results** | Create test to prove results | Expect specific outcomes |
+| **Write Code** | Complete when tests pass | Complete when results meet expectations |
+| **Cleanup** | Refactor new and existing code | Refactor new code. Fix any noticed errors in existing code |
 
 --- 
 
@@ -95,3 +124,9 @@ Other Things
   - Helps me figure out if things are going to work
   - Helps me determine estimates
   - It tells me how hard it's going to be to upgrade/refactor
+
+^
+R Jeffries and G Melnik, writing for IEE have reported that TDD helps in decreasing production bugs by 40-80%. Of course, it can add 10-30% to the initial development time and cost but considering the factors like defect fixes, and maintenance it is justified to implement TDD for the first phase of project development. In fact, the benefits of TDD have been tested on real projects by several companies and they found that the process is enormously beneficial.
+
+---
+
