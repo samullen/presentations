@@ -1,6 +1,6 @@
 autoscale: true
 build-lists: true
-theme: Scherzkeks, 7
+theme: Titillium, 1
 
 # *Test Driven Development*
 ## You've Been Doing it all along
@@ -96,6 +96,7 @@ theme: Scherzkeks, 7
 - There's nothing formal about, and definitely nothing automated
 - There's a problem, and we create a solution for that problem according to our understanding at the time
 - If you were to codify the process, it would look like this
+- If you look closely at the two processes—and maybe squint a little—you’ll see that they’re nearly identical.
 
 ---
 
@@ -107,9 +108,97 @@ theme: Scherzkeks, 7
 | **Write Code** | Complete when tests pass | Complete when results meet expectations |
 | **Cleanup** | Refactor new and existing code | Refactor new code. Fix any noticed errors in existing code |
 
+^
+- Each process goes about the steps differently, but they're the same steps
+- If there's a difference, it's that one stores the expectations for the future.
+- It's *that* difference that makes all the difference
+
+---
+
+# The TDD Advantage
+
+* Automation
+* Consistency
+* Comprehensiveness
+* Confidence
+
+^ 
+- Automation: By storing a collection of tests, it’s a simple matter to automate the process of verifying that everything in the code still works. Most languages even have a tool that can watch for changes and run the test suite automatically.
+- Consistency: To ensure a block of code meets expectations, every potential outcome needs to be tested. You’ll inevitably miss a step if you do that manually, but keeping a storehouse of tests ensures that code is tested the same way every time.
+- Comprehensiveness: As tests are created and stored, the entire codebase will eventually be covered. This allows us to see errors or problems anywhere in the project resulting from changes anywhere else in the codebase.
+- Confidence: When your project is covered by a suite of tests, it gives you the confidence to make changes. Because with any change, your tests will tell you what broke.
+- Those are just the advantages TDD has over tradional methods.
+- Lett's look at the benefits which come with the intentional practice of TDD
+
 --- 
 
-# Benefits of TDD
+# **Benefits** of *TDD*
+
+^ 
+- Many proponents of TDD would have you believe that by practicing it, you'll...
+- Magically get cleaner code
+- Intuitively practice SOLID principles
+- And even work harder
+- It doesn't work like that
+- TDD is just a technique
+- It makes some practices more difficult, but let's face it, there's always someone who'll figure out a way to complicate things
+
+---
+
+# **Benefits** of *TDD*
+## Thinking
+
+---
+
+# **Benefits** of *TDD*
+## Less Code
+
+---
+
+# **Benefits** of *TDD*
+## Self-Documenting
+
+---
+
+# **Benefits** of *TDD*
+## Document the API
+
+---
+
+# **Benefits** of *TDD*
+## Hard Numbers
+
+In a Microsoft funded research paper, researchers discovered TDD resulted in ...
+
+* An increase of 15-30% in initial development time
+* A 40-90% decrease in defects
+
+> — Realizing Quality Improvement Through Test Driven Development: Results and Experiences of Four Industrial Teams
+
+---
+
+# **Benefits** of *TDD*
+## Hard Numbers, Cont'd
+
+* 87.5% of developers reported better requirements understanding
+* 95.8% of developers reported reduced debugging efforts
+* 78% of developers reported TDD improved overall productivity
+* 50% of developers found that it decreased overall development time
+* 92% of developers felt that TDD yielded high-quality code
+* 79% of developers believed TDD promoted simpler design
+
+^
+- Matt Hawley collated results from several research papers and provided the following findings
+- These findings are great if you're making a case to mgmt
+- The real benefit is summarized by Uncle Bob Marting 
+
+---
+
+# **Benefits** of *TDD*
+## The *Real* Benefit
+
+> If you follow TDD, and use it to build a test suite that you trust. And if that test suite executes in seconds (a design goal). Then you will not be afraid of the code. You will not be afraid to clean it. You will not be afraid to fix it. You won’t be afraid to do anything to the code, because your tests will tell you if you’ve broken it.
+> —"Uncle" Bob Martin
 
 ---
 
@@ -117,8 +206,9 @@ theme: Scherzkeks, 7
 
 * It doesn't click the first time you try it
 
-Other Things
-------------
+---
+
+## Other Things
 
 * Mention that when I take on new projects I always ask if there are tests
   - Helps me figure out if things are going to work
