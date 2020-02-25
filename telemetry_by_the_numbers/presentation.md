@@ -18,7 +18,7 @@ You've probably heard this quote before
 - It's short, understandable, and oozes common sense
 - Example:
   - If we measure how much resources our systems require, we can manage allocation of new servers
-  - If we know where a customer gets hung up in the checkout process, we can improve the experience
+  - If we know where a customer gets hung up in the checkout process, we can fix the problem and improve the experience
 - It's a great quote; it's just not all of it.
 
 ---
@@ -43,7 +43,7 @@ You've probably heard this quote before
 # Telemetry: By the Numbers
 
 - Monitoring
-- Measurements and metrics
+- Measurements and Metrics
 - What makes a good metric
 - The Telemetry library
 
@@ -52,7 +52,7 @@ You've probably heard this quote before
 - M&M: What we mean by measurements and metrics
 - Good v Bad: What makes a good metric and how to spot bad ones
 - Telemetry: A brief summary of how to use Telemetry and Telemetry Metrics
-- With that out of the way...
+- Now that we have that covered...
 
 ---
 
@@ -74,15 +74,15 @@ You've probably heard this quote before
 # What we do
 
 - Capture, filter, and validate sales leads
-- Enable companies to comply with regulations (e.g TCPA, CASL, CCPA)
 - Document consumers' consent to be contacted
+- Enable companies to comply with regulations (e.g TCPA, CASL, CCPA)
 - Improve conversion rates
 
 ^
-- Marketing wanted me to read a couple pages of nonsense, but I'll keep it simple
 - We're one of the platinum sponsors
 - And before you ask: no, that's not how I got this speaking slot
 - Bruce and Maggie made that mistake on their own without any financial incentives
+- And of course, we're hiring
 - let's talk about monitoring
 
 ---
@@ -96,7 +96,7 @@ You've probably heard this quote before
   - May involve watching ...
   - network traffic
   - CPU / Memory load
-  - Storage
+  - Errors
   - Database performance
   - response times
   - and more
@@ -107,9 +107,9 @@ You've probably heard this quote before
 # Why Should We **Monitor**?
 
 - Helps us *understand* our system
-- *Catch issues* prior to your customers finding them
+- Preemptively *Catch issues*
 - Provide *benchmarks* to measure against
-- Enable you to *make good decisions* about what to do next
+- Enable you to *make good decisions*
 
 ^
 - Understanding:
@@ -128,6 +128,7 @@ You've probably heard this quote before
     - Otherwise, how do you know that the new algorithm is better than the previous one?
 - Decisions:
   - Lastly, and this summarizes them all, it's to help us make good decisions
+- If you are monitoring your system just so you can impress people on Twitter with your graphs, you're doing it wrong.
 
 ---
 
@@ -150,8 +151,8 @@ A unit-specific value for something
 
 ^
 - By itself, a measurement is almost useless
+  - It's a single point on a graph
   - it's data, not information
-  - ex: 100% CPU utilization doesn't mean anything without context
 - A metric on the other hand provides context...
 
 ---
@@ -203,9 +204,12 @@ Used to track and assess measurements
 
 - Ratios are easier to act on
 - Ratios are inherently comparative
-- Ratios are also good for comparing factors that are somehow opposed
+- Ratios are good for comparing seemingly opposing factors
 
 ^
+- Action: It tells you what you need to do to achieve your goals (example: performance)
+  - Do you need to continue working to improve, or can you switch gears
+- Comparative: Comparing a daily metric over the course of the month enables you to see if something is a trend or just a spike
 - Examples of this last one
   - errors per request
   - Signups vs. deactivations
@@ -249,18 +253,19 @@ The metrics you track must...
   - Error counts
   - Even orders and sales
 - Why is that?
-  - Let's look at page views
-  - Let's say a web page got 5M views in a day. Is that good or bad?
-    - If it's Apple or Google, it's probably really bad
-    - If it was my blog, I'd think it was really bad, because it likely means I managed to get in trouble for something stupid.
-    - But if it's a startup that's been struggling it might be really good.
-  - Even so, what does page views by itself mean?
-    - Does that translate to sales?
-    - Does it answer why page views changed?
-    - What decisions does it help you make?
-  - By itself, and with no correlation, vanity metrics are useless
-  - It's like junk food. It tastes good, but doesn't provide any real value.
-- Now that we know about monitoring, measurements, and metrics, let's look at Telemetry and how we can start capturing data
+  - Let's look at this last one: sales
+  - Let's say your site increased signups by 20%. Is that good or bad?
+    - on the surface it appears like a good thing
+    - But what questions does it answer?
+      - Does it explain WHY conversions increased?
+        - Was it from a marketing push, a new UI, placement in the app store?
+      - What about how many customers you lost in the same period (i.e. churn)?
+      - Are customers using the product/service?
+    - Based on sales alone, what decisions does it help you make?
+  - By themselves vanity metrics are easy to get excited about, or even afraid of
+  - But they don't provide real value: they don't help you make decisions.
+  - They're like junk food. It tastes good, but doesn't provide any real value.
+- Now that we know about monitoring, measurements, and metrics, let's look at Telemetry and how we can start capturing useful data
 
 ---
 
@@ -385,7 +390,6 @@ end
 - Now that I've shown you how to set up Telemetry to handle events
 - Your first thoughts might be:
   - "how do I organize these?"
-  - "how do I name the events?"
 - The Telemetry team has you covered on this with Telemetry.Metrics
 
 ---
@@ -474,7 +478,13 @@ children = [
   - ratio or a rate
   - changes behaviour
 - Use *Telemetry* and *Telemetry.Metrics*
-- *ActiveProspect* is hiring
+
+^
+- So what do I want you to take away from this?
+- Monitoring
+- Good metrics
+  - While we didn't talk about specifics of WHAT to monitor,
+  - We did look at how to choose good metrics to monitor
 
 ---
 
@@ -491,5 +501,4 @@ children = [
 
 ^
 - Maggie and Bruce for making Lone Star Elixir possible
-- All of you for sitting through me nerding out on Metrics and Transformers
 - If you have questions, you can find me in the hallway or online
